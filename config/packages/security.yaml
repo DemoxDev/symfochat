@@ -11,6 +11,7 @@ security:
             security: false
         main:
             lazy: true
+            entry_point: 'App\Security\UserAuthenticator' # Use your actual authenticator class
             provider: users_in_memory
             custom_authenticator: App\Security\UserAuthenticator
             logout:
