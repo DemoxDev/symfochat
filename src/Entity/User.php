@@ -2,13 +2,16 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use ApiPlatform\Metadata\ApiResource;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ApiResource]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -24,6 +27,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @var string The hashed password
+     * @ApiProperty(readable=false)
      */
     #[ORM\Column]
     private ?string $password = null;
@@ -84,6 +88,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\Length(max=4096)
+     * @ApiProperty(readable=false)
+     */
+    private $plainPassword = null;
+
+    public function getPlainPassword(): string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(string $password): self
+    {
+        $this->plainPassword = $password;
+
+        return $this;
+    }
+
+    /**
      * @see PasswordAuthenticatedUserInterface
      */
     public function getPassword(): string
@@ -138,8 +161,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setIsConnected(bool $isConnected): static
     {
+        if ($isConnected) {
+            $this->lastConnected = new \DateTimeImmutable();
+        } else {
+            $this->lastConnected = null;
+        }
         $this->isConnected = $isConnected;
-
         return $this;
     }
 }
