@@ -11,6 +11,8 @@ use App\Form\UserType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Message;
+use App\Form\MessageType;
 
 class SecurityController extends AbstractController
 {
@@ -71,6 +73,34 @@ class SecurityController extends AbstractController
         // Return response
         return $this->render('security/register.html.twig', [
             'form' => $form->createView()
+        ]);
+    }
+
+    #[Route('/messages', name: 'app_messages')]
+    public function messages(Request $request): Response
+    {
+        // Créez un nouveau message
+        $message = new Message();
+        $form = $this->createForm(MessageType::class, $message);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Associez le message à l'utilisateur actuel
+            $message->setUser($this->getUser());
+            $message->setCreatedAt(new \DateTimeImmutable());
+
+            // Enregistrez le message dans la base de données
+            $this->entityManager->persist($message);
+            $this->entityManager->flush();
+        }
+
+        // Récupérez tous les messages de la base de données
+        $messages = $this->entityManager->getRepository(Message::class)->findAll();
+
+        // Retournez la réponse
+        return $this->render('security/messages.html.twig', [
+            'form' => $form->createView(),
+            'messages' => $messages,
         ]);
     }
 }

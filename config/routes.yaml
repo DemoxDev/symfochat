@@ -15,3 +15,7 @@ app_logout:
 app_registration:
   path: /registration
   controller: App\Controller\SecurityController::register
+
+app_messages:
+  path: /messages
+  controller: App\Controller\SecurityController::messages
