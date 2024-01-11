@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+    <h1>Welcome to the Home Page!</h1>
+
+    {% if app.user %}
+        <p>Hello, {{ app.user.username }}!</p>
+        <p><a href="{{ path('app_logout') }}">Logout</a></p>
+    {% else %}
+        <p>You are not logged in. <a href="{{ path('app_login') }}">Login</a></p>
+    {% endif %}
+{% endblock %}

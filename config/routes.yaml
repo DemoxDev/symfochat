@@ -19,3 +19,7 @@ app_registration:
 app_messages:
   path: /messages
   controller: App\Controller\SecurityController::messages
+
+app_home:
+  path: /home
+  controller: App\Controller\SecurityController::home
