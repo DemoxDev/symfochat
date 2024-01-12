@@ -6,6 +6,7 @@
     <h1>Messages</h1>
 
     {{ form_start(form) }}
+        {{ form_row(form.receiver) }}
         {{ form_row(form.content) }}
         <button type="submit">Send</button>
     {{ form_end(form) }}
@@ -13,7 +14,7 @@
     <h2>All Messages</h2>
     <ul>
         {% for message in messages %}
-            <li>{{ message.user.username }}: {{ message.content }} ({{ message.createdAt|date('Y-m-d H:i:s') }})</li>
+            <li>{{ message.user.username }} to {{ message.receiver.username }}: {{ message.content }} ({{ message.createdAt|date('Y-m-d H:i:s') }})</li>
         {% endfor %}
     </ul>
 {% endblock %}

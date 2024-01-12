@@ -8,7 +8,6 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
 #[ApiResource]
 class Message
@@ -24,7 +23,7 @@ class Message
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
+    private ?User $receiver = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $createdAt = null;
@@ -46,14 +45,14 @@ class Message
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getReceiver(): ?User
     {
-        return $this->user;
+        return $this->receiver;
     }
 
-    public function setUser(?User $user): static
+    public function setReceiver(?User $receiver): static
     {
-        $this->user = $user;
+        $this->receiver = $receiver;
 
         return $this;
     }
